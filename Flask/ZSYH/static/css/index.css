@@ -1,0 +1,144 @@
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0
+}
+body {
+    overflow: hidden;
+    text-align: center;
+    background-image:url("../images/bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+img {
+    border: 0;
+}
+/*#header {
+    background-color: #27a4f3;
+    overflow: hidden;
+    padding: 0 0 0;
+}*/
+.btn {
+    display: block;
+    margin: 0 auto 20px;
+    font-size: 20px;
+    color: #FFF;
+    text-decoration: none;
+    border-radius: 36px;
+}
+h1,
+h2 {
+    position: relative;
+    margin: 0;
+    font-weight: normal;
+    color: #fff;
+}
+#wrap {
+    height: 100%;
+}
+.bgBlur {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+.title {
+    margin-bottom: 20px;
+    font-size: 40px;
+    color: #000;
+}
+.title img {
+    width: 50px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.title span {
+    vertical-align: middle;
+}
+.sub-title {
+    margin-bottom: 60px;
+    font-size: 0;
+}
+.sub-title span {
+    margin-right: 20px;
+    font-size: 20px;
+}
+.sub-title span:last-child {
+    margin-right: 0;
+}
+.tips {
+    font-size: 14px;
+    color: #fff;
+}
+.scan {
+    margin-bottom: 50px;
+}
+.question {
+    margin: 20px 0;
+    padding-bottom: 20px;
+}
+
+.weixin_hint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .6);
+}
+.weixin_hint .line {
+    float: right;
+    margin: 20px 20px 0 0;
+}
+.weixin_hint .tips-box {
+    padding-top: 20px;
+    text-align: right;
+}
+.weixin_hint img {
+    width: 60%;
+    height: 244px;
+}
+.weixin_hint p {
+    margin-bottom: 70px;
+    color: #fff;
+ }
+.btn.down {
+    padding: 14px 0;
+    width: 70%;
+    background-color: #3da5fe;
+}
+.btn.know {
+    width: 50%;
+    padding: 10px 0;
+    border: 2px solid #fff;
+}
+.code canvas {
+    padding: 12px;
+    background-color: #fff;
+}
+@media only screen and (min-height: 568px){
+    .title {
+        margin-top: 20px;
+    }
+    /*.weixin_hint .line {
+        width: 90px;
+        height: 150px;
+    }*/
+}
+@media only screen and (min-height: 667px){
+    .title {
+        margin-top: 40px;
+    }
+    .weixin_hint .tips-box {
+        padding-right: 10px;
+    }
+}
+@media only screen and (min-height: 736px){
+    .title {
+        margin-top: 80px;
+    }
+    .weixin_hint .tips-box {
+        padding-right: 20px;
+    }
+}

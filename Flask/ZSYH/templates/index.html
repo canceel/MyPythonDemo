@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://zsyh.yonghui.cn/download/pcv4.html?ver=4.0.2 -->
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://zsyh.yonghui.cn/download/favicon.ico" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pcdownload.css') }}">
+    <link rel="icon" href="{{ url_for('static',filename='images/ico.png') }}" type="image/x-ico">
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.min.js.下载') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.pseudo.js.下载') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.qrcode.js.下载') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/utf.js.下载') }}"></script>
+    <script type="text/javascript">
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                return {         //移动终端浏览器版本信息
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+        if (browser.versions.mobile || browser.versions.android || browser.versions.iPhone) {
+            window.location = "mobile";
+        }else {
+            //window.location = "pcv4.html?ver=4.0.2";
+        }
+
+    </script>
+    <!--[if lt IE 10]>
+    <script type="text/javascript" src="lib/PIE.js"></script>
+    <![endif]-->
+    <title>掌上永辉</title>
+    <script type="text/javascript">
+        var BASE_DOWN_URL = "pc_setup/",
+                _winWidth = 0, // 窗口宽度
+                _winHeight = 0,  // 窗口高度
+                _picWidth = 0;   // 现图宽度
+
+        $(document).ready(function () {
+            if (window.PIE) {
+                $('.ie-css3-repair').each(function () {
+                    PIE.attach(this);
+                });
+            }
+            $("#betop").click(function (o) {
+                o.preventDefault();
+                if (document.documentElement && document.documentElement.scrollTop) {
+                    $(document.documentElement).animate({scrollTop: 0}, 1000, function () {
+                    });
+                } else {
+                    $("html body").animate({scrollTop: 0}, 1000, function () {
+                    });
+                }
+            });
+            $(window).scroll(function () {
+                var o = $(window).scrollTop();
+                if (o > 0) {
+                    $("#betop").fadeIn();
+                } else {
+                    $("#betop").fadeOut();
+                }
+            });
+
+            $(window).resize(function () {
+                calcWin();
+            });
+
+            $('.type-icons li').on({
+                click: function () {
+                    $('.type-icons li.active img').eq(1).addClass('hidden').siblings().removeClass('hidden');
+                    $(this).find('img').eq(0).addClass('hidden').siblings().removeClass('hidden');
+                    $(this).addClass('active').siblings().removeClass('active');
+
+                    $('#bannerList').css({
+                        left: -($(this).index() * _picWidth)
+                    });
+                },
+                mouseenter: function () {
+                    if ($(this).index() === 0 || $(this).index() === 1) {
+                        $('.qrCode').css({
+                            left: $(this).width() * $(this).index() + ($(this).width() - $('.qrCode').innerWidth()) / 2
+                        });
+                        $('.qrCode').stop(true, true).fadeIn('fast');
+                    }
+                },
+                mouseleave: function () {
+                    if ($(this).index() === 0 || $(this).index() === 1) {
+                        $('.qrCode').fadeOut('fast');
+                    }
+                }
+            });
+
+            calcWin();
+
+            if (!browser.versions.trident) {
+                // 动态生成二维码
+                // $('#code').removeClass('hidden');
+                // 显示二维码图片
+                $('#qrPic').removeClass('hidden');
+            } else {
+                // 显示二维码图片
+                $('#qrPic').removeClass('hidden');
+            }
+        });
+
+        function getWidth() {
+            if (window.innerWidth !== undefined) {
+                return window.innerWidth;
+            } else {
+                return document.documentElement.clientWidth
+            }
+        }
+
+        function getHeight() {
+            if (window.innerHeight !== undefined) {
+                return window.innerHeight;
+            } else {
+                return document.documentElement.clientHeight
+            }
+        }
+
+        // 计算窗口宽高
+        function calcWin() {
+            _winWidth = getWidth();
+            _winHeight = getHeight();
+
+            // 设置banner图片高度
+            $('#bannerList li img').each(function () {
+                $(this).height(_winHeight);
+
+                if ($(this).width() < _winWidth) {
+                    $(this).width(_winWidth);
+                }
+            });
+
+            _picWidth = $('#bannerList li img').eq(0).width();
+
+            // 设置banner列表宽度
+            $('#bannerList').width(_picWidth * $('#bannerList li').length).css({
+                'margin-left': -(_picWidth - _winWidth) / 2
+            });
+            $('.banner').height(_winHeight);
+
+            calcQrCodeSize();
+        }
+
+        // 获取目录路径
+        function getPath(path) {
+            var pos = window.document.location.href.lastIndexOf('/');
+
+            return window.document.location.href.slice(0, pos) + path;
+            //return "http://im.midea.com"
+        }
+
+        // 生成二维码
+        function makeQrCode(opt) {
+            var params = $.extend({
+                w: 229,
+                h: 220,
+                logoW: 72,
+                logoH: 72,
+                logoImg: '{{ url_for('static',filename='images/icon-qr.png') }}',
+                content: getPath('/down.html'),
+                el: '#code'
+            }, opt);
+
+            var options = {
+                render: "canvas",
+                ecLevel: 'H',//识别度
+                fill: '#000',//二维码颜色
+                background: '#ffffff',//背景颜色
+                quiet: 2,//边距
+                width: params.w,//宽度
+                height: params.h,
+                text: params.content,//二维码内容
+                //中间logo start
+                mode: 4,
+                //中间logo end
+                src: params.logoImg,
+                imgWidth: params.logoW,
+                imgHeight: params.logoH
+            };
+
+            $(params.el).empty().qrcode(options);
+        }
+
+        // 计算二维码宽高
+        function calcQrCodeSize() {
+            var qrCodeH = _winHeight - 130 - 80;
+
+            if (!browser.versions.trident) {
+                // 动态生成二维码
+                if (qrCodeH < 335) {
+                    $('.qrCode').height(qrCodeH);
+                    makeQrCode({
+                        h: qrCodeH - 100
+                    });
+                } else {
+                    $('.qrCode').height(335);
+                    makeQrCode();
+                }
+            } else {
+                // 显示二维码图片
+                if (qrCodeH < 335) {
+                    $('.qrCode').height(qrCodeH);
+                    $('#qrPic').height(qrCodeH - 100);
+                } else {
+                    $('.qrCode').height(335);
+                    $('#qrPic').height(220);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<!--<span id="betop" title="返回顶部" class="gotop"></span>-->
+<div class="headBg">
+    <div class="header">
+
+        <!--<img class="logo_header" src="img/logo_header.png" title=" Connect" alt=" Connect"/>-->
+        <img class="logo_header" src="{{ url_for('static',filename='images/ico.png') }}" title=" Connect" alt=" Connect">
+        <div class="logo_header_text">掌上永辉</div>
+        <img class="logo" src="{{ url_for('static',filename='images/logo_new.png') }}" title=" Connect" alt=" Connect">
+        <!--<p>
+            <a href="http://mipnew.midea.com/" target="_blank">MIP</a>|
+            <a href="pc.html" target="_blank"> Connect PC版</a>|
+            <a href="http://im.midea.com" target="_blank"> Connect 移动版</a>
+        </p>-->
+        <!--<div class="feedback">
+            您的陪伴与关注是我们成长的动力。
+        </div>-->
+        <!-- JiaThis Button BEGIN -->
+       <!-- <div id="ckepop">
+            <ul>
+                <li class="share-to-text">
+                    <img src="img/shareTo.png">
+                </li>
+                <li>
+                    <a class="jiathis_button_cqq"></a>
+                </li>
+                <li>
+                    <a class="jiathis_button_weixin"></a>
+                </li>
+                <li>
+                    <a class="jtico_tsina" href="javascript:;" onclick="jiathis_sendto('tsina');return false;"></a>
+                </li>
+                <li>
+                    <a href="https://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico_jiathis"
+                       target="_blank"></a>
+                </li>
+            </ul>
+            &lt;!&ndash;<a class="jiathis_counter_style"></a> </div>&ndash;&gt;
+            <script type="text/javascript" src="https://v3.jiathis.com/code/jia.js?uid=1" charset="utf-8"></script>
+        </div>-->
+        <!-- JiaThis Button END -->
+    </div>
+</div>
+<div class="bannerBg">
+    <div class="banner" title="使用掌上永辉，沟通如此简单" style="height: 900px;">
+        <!--<a id="pcDownloadLink" target="_blank" class="downLoad"   title="立即下载" href="https://map.midea.com/map/mam/apps/download/com.midea.connect/winphone?appKey=fb27d257e0d464d63d200d9e7c2ded2a"></a>-->
+        <ul class="bannerList" id="bannerList" style="width: 6750px; margin-left: -165px;">
+            <li class="ios-bg"><img src="{{ url_for('static',filename='images/iphone-bg.jpg') }}" style="height: 900px;"></li>
+            <li class="android-bg"><img src="{{ url_for('static',filename='images/android-bg.jpg') }}" style="height: 900px;"></li>
+            <li class="pc-bg">
+                <img src="{{ url_for('static',filename='images/pc-bg.jpg') }}" style="height: 900px;">
+                <a class="download-pc" id="downloadBtn" href="https://zsyh.yonghui.cn/mam-api/download/app/windows/d6717f50"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="type-icons">
+        <div class="icons-box">
+            <ul>
+                <li class="active">
+                    <div>
+                        <img class="hidden" src="{{ url_for('static',filename='images/iphone-1.png') }}"><img src="{{ url_for('static',filename='images/iphone-2.png') }}">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <img src="{{ url_for('static',filename='images/android-1.png') }}"><img class="hidden" src="{{ url_for('static',filename='images/android-2.png') }}">
+                    </div>
+                </li>
+                <li class="last">
+                    <div>
+                        <img src="{{ url_for('static',filename='images/pc-1.png') }}"><img class="hidden" src="{{ url_for('static',filename='images/pc-2.png') }}">
+                    </div>
+                </li>
+            </ul>
+            <div class="qrCode hidden" style="height: 335px;">
+                <img class="qrCode-bg" src="{{ url_for('static',filename='images/qrcodeBg.png') }}">
+                <div class="qrcode-info">
+                    <div class="hidden" id="code"><canvas width="229" height="220"></canvas></div>
+                    <img class="" id="qrPic" src="{{ url_for('static',filename='images/qr.png') }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<a class="old-download" href="http://im.midea.com/v3">美信旧版下载</a>-->
+</div>
+<!--<div class="footer">-->
+<!--Copyright © 1968-2014 Midea Group. all right reserved. <br>美的集团<a target="_blank" href="#">版权所有</a>-->
+<!--</div>-->
+
+</body></html>
