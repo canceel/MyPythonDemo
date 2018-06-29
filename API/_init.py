@@ -1,5 +1,7 @@
 from flask import Flask,render_template,make_response,request
+import json
 from weather import *
+from MyNovel import *
 
 app = Flask(__name__)
 
@@ -18,6 +20,15 @@ def weather():
 		else:
 			result=getWeather(location)
 	return str(result)
+
+@app.route('/getNovel',methods=['GET'])
+def novel():
+	if request=="":
+		result="request must not null"
+	else:
+		keyworld=request.args.get('keyworld')
+		result=getBooksInfo(0,keyworld)
+	return json.dumps(str(result.data))
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0',debug=True)
